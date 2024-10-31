@@ -14,7 +14,7 @@ func _process(delta: float) -> void:
 	if draw_camera_logic:
 		draw_logic()
 	
-	global_position = target.global_position
+	position = target.position
 	
 	super(delta)
 

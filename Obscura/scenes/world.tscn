@@ -92,8 +92,8 @@ script = ExtResource("3_4fllx")
 [node name="AutoScrollCamera" parent="." node_paths=PackedStringArray("target") instance=ExtResource("3_ttnp6")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 30, 0)
 script = ExtResource("6_jvh4f")
-frame_width = 25.0
-frame_height = 13.0
+top_left = Vector2(-12.5, 6.5)
+bottom_right = Vector2(12.5, -6.5)
 autoscroll_speed = 8.0
 target = NodePath("../Vessel")
 
@@ -107,7 +107,7 @@ script = ExtResource("3_4fllx")
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 30, 0)
 script = ExtResource("7_giip7")
 follow_speed = 45.0
-catchup_speed = 12.0
+catchup_speed = 20.0
 leash_distance = 6.0
 target = NodePath("../Vessel")
 
