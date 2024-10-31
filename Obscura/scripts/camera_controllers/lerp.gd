@@ -1,9 +1,9 @@
 class_name LerpSmoothing
 extends CameraControllerBase
 
-@export var follow_speed: float = 35.0
-@export var catchup_speed: float = 0.01
-@export var leash_distance: float = 8.0
+@export var follow_speed: float = target.BASE_SPEED - 5
+@export var catchup_speed: float = 12.0
+@export var leash_distance: float = 6.0
 
 func _ready() -> void:
 	super()
@@ -18,7 +18,7 @@ func _process(delta: float) -> void:
 	
 	var tpos = target.global_position
 	var cpos = global_position
-	var distance_to_player = tpos.distance_to(cpos)
+	var distance_to_player = Vector2(tpos.x, tpos.z).distance_to(Vector2(cpos.x, cpos.z))
 	
 	# Determine if the player is moving based on target's velocity
 	var is_player_moving = (target.velocity.x || target.velocity.z > 0)
@@ -27,7 +27,8 @@ func _process(delta: float) -> void:
 	var speed = follow_speed if is_player_moving else catchup_speed
 	
 	# Find direction of player position
-	var direction_to_player = (tpos - cpos).normalized()
+	var direction_to_player = Vector3(tpos.x - cpos.x, 0,  tpos.z - cpos.z).normalized()
+	
 	# Limit the maximum distance between the vessel and camera
 	if distance_to_player > leash_distance + target.RADIUS:
 		global_position.x = tpos.x - direction_to_player.x * leash_distance
@@ -37,6 +38,11 @@ func _process(delta: float) -> void:
 		global_position.x += direction_to_player.x * speed * delta
 		global_position.z += direction_to_player.z * speed * delta
 	
+	# Function to prevent jittering when camera is centered. This is a bandage fix.
+	if not is_player_moving && distance_to_player < 0.2:
+		global_position.x = tpos.x
+		global_position.z = tpos.z
+
 	super(delta)
 
 func draw_logic() -> void:
