@@ -37,13 +37,19 @@ func _physics_process(_delta):
 	var direction = (Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	#var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	
+	var active_camera = get_viewport().get_camera_3d()
+	var autoscroll_speed = 0
+	
+	if active_camera is FrameBoundAutoscroller:
+		autoscroll_speed = active_camera.autoscroll_speed
+	
 	if direction:
-		velocity.x = direction.x * speed
+		velocity.x = direction.x * speed + autoscroll_speed
 		velocity.z = direction.z * speed
 	else:
-		velocity.x = move_toward(velocity.x, 0, speed)
+		velocity.x = move_toward(velocity.x, 0 + autoscroll_speed, speed)
 		velocity.z = move_toward(velocity.z, 0, speed)
-
+	
 	move_and_slide()
 
 func _play(player:AudioStreamPlayer2D) -> void:
