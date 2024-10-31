@@ -44,7 +44,7 @@ terrain_manager = NodePath("../TerrainManager")
 
 [node name="CameraSelector" type="Node" parent="." node_paths=PackedStringArray("cameras")]
 script = ExtResource("2_qffo5")
-cameras = [NodePath("../PushBoxCamera"), NodePath("../PositionLockCamera"), NodePath("../AutoScrollCamera"), NodePath("../LerpCamera")]
+cameras = [NodePath("../PushBoxCamera"), NodePath("../PushBoxCamera2"), NodePath("../PushBoxCamera3"), NodePath("../PositionLockCamera"), NodePath("../AutoScrollCamera"), NodePath("../LerpCamera")]
 
 [node name="PushBoxCamera" parent="." node_paths=PackedStringArray("target") instance=ExtResource("3_ttnp6")]
 transform = Transform3D(1, 0, 0, 0, 1.19249e-08, 1, 0, -1, 1.19249e-08, 0, 30, 0)
@@ -78,8 +78,8 @@ offset_right = 40.0
 offset_bottom = 23.0
 script = ExtResource("3_4fllx")
 
-[node name="PositionLockCamera" type="Camera3D" parent="." node_paths=PackedStringArray("target")]
-transform = Transform3D(1, 8.32935e-22, -1.77636e-15, 1.77636e-15, 1.19249e-08, 1, 8.54118e-22, -1, 1.19249e-08, 3.31134e-14, 30, 0)
+[node name="PositionLockCamera" parent="." node_paths=PackedStringArray("target") instance=ExtResource("3_ttnp6")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 30, 0)
 script = ExtResource("5_owh8y")
 target = NodePath("../Vessel")
 
@@ -89,9 +89,12 @@ offset_right = 40.0
 offset_bottom = 23.0
 script = ExtResource("3_4fllx")
 
-[node name="AutoScrollCamera" type="Camera3D" parent="." node_paths=PackedStringArray("target")]
-transform = Transform3D(1, 8.32935e-22, -1.77636e-15, 1.77636e-15, 1.19249e-08, 1, 8.54118e-22, -1, 1.19249e-08, 3.31134e-14, 30, 0)
+[node name="AutoScrollCamera" parent="." node_paths=PackedStringArray("target") instance=ExtResource("3_ttnp6")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 30, 0)
 script = ExtResource("6_jvh4f")
+frame_width = 25.0
+frame_height = 13.0
+autoscroll_speed = 8.0
 target = NodePath("../Vessel")
 
 [node name="debug" type="Label" parent="AutoScrollCamera"]
@@ -101,7 +104,7 @@ offset_bottom = 23.0
 script = ExtResource("3_4fllx")
 
 [node name="LerpCamera" parent="." node_paths=PackedStringArray("target") instance=ExtResource("3_ttnp6")]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 30, -30)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 30, 0)
 script = ExtResource("7_giip7")
 follow_speed = 45.0
 catchup_speed = 12.0
