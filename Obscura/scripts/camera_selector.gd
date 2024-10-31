@@ -17,6 +17,7 @@ func _process(_delta):
 	
 	if Input.is_action_just_pressed("cycle_camera_controller"):
 		current_controller += 1
+		
 		if len(cameras) < current_controller+1:
 			current_controller = 0
 		
@@ -26,7 +27,7 @@ func _process(_delta):
 					cameras[current_controller].make_current()
 				else:
 					cameras[index].current = false
-					cameras[index].draw_camera_logic = false
+					cameras[index].draw_camera_logic = true
 		#make sure we have an active controller
 		if cameras[current_controller] == null:
 			for index in len(cameras):
