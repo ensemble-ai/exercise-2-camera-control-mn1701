@@ -5,6 +5,7 @@ extends CameraControllerBase
 @export var bottom_right: Vector2 = Vector2(12.5, -6.5)
 @export var autoscroll_speed: float = 8.0
 
+
 func _ready() -> void:
 	super()
 	position = target.position
@@ -52,6 +53,7 @@ func _process(delta: float) -> void:
 	target.velocity = player_velocity
 	
 	super(delta)
+
 
 func draw_logic() -> void:
 	var mesh_instance := MeshInstance3D.new()

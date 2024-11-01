@@ -5,6 +5,7 @@ extends CameraControllerBase
 @export var catchup_speed: float = 20.0
 @export var leash_distance: float = 4.0
 
+
 func _ready() -> void:
 	super()
 	position = target.position
@@ -42,6 +43,7 @@ func _process(delta: float) -> void:
 		global_position.z += direction_to_player.z * speed * delta * (max(distance_to_player/leash_distance, 0.05))
 
 	super(delta)
+
 
 func draw_logic() -> void:
 	var mesh_instance := MeshInstance3D.new()

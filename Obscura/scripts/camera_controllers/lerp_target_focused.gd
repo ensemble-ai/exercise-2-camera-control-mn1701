@@ -5,8 +5,8 @@ extends CameraControllerBase
 @export var leash_distance: float = 6.0
 @export var catchup_delay_duration: float = 0.2
 @export var catchup_speed: float = 25.0
-
 var time_since_stopped: float = 0.0
+
 
 func _ready() -> void:
 	super()
