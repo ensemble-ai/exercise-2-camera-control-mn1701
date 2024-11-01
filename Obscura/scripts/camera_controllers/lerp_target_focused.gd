@@ -1,14 +1,16 @@
-class_name LerpSmoothing
+class_name LerpTargetFocusedSmoothing
 extends CameraControllerBase
 
-@export var follow_speed: float = target.BASE_SPEED - 5
+@export var lead_speed: float = target.BASE_SPEED + 10
+@export var catchup_delay_duration: float = 0.2
 @export var catchup_speed: float = 20.0
-@export var leash_distance: float = 4.0
+@export var leash_distance: float = 2.0
+
+var time_since_stopped: float = 0.0
 
 func _ready() -> void:
 	super()
 	position = target.position
-
 
 func _process(delta: float) -> void:
 	if !current:
@@ -22,25 +24,30 @@ func _process(delta: float) -> void:
 	var tpos = target.global_position
 	var cpos = global_position
 	var distance_to_player = Vector2(tpos.x, tpos.z).distance_to(Vector2(cpos.x, cpos.z))
-	
-	# Determine if the player is moving based on target's velocity
-	var is_player_moving = (target.velocity.x || target.velocity.z > 0)
-	
-	# Use follow_speed if the player is moving, otherwise use catchup_speed
-	var speed = follow_speed if is_player_moving else catchup_speed
-	
-	# Find direction of player position
-	var direction_to_player = Vector3(tpos.x - cpos.x, 0,  tpos.z - cpos.z).normalized()
-	
-	# Limit the maximum distance between the vessel and camera
-	if distance_to_player > leash_distance + target.RADIUS:
-		global_position.x += direction_to_player.x * target.BASE_SPEED * delta
-		global_position.z += direction_to_player.z * target.BASE_SPEED * delta
-	else:
-		# Move the camera towards the player with scaling speed based on the distance
-		global_position.x += direction_to_player.x * speed * delta * (max(distance_to_player/leash_distance, 0.05))
-		global_position.z += direction_to_player.z * speed * delta * (max(distance_to_player/leash_distance, 0.05))
 
+	var is_player_moving = (target.velocity.x != 0 || target.velocity.z != 0)
+
+	# Calculate direction of player movement
+	var movement_direction = Vector3(target.velocity.x, 0, target.velocity.z).normalized()
+	var direction_to_player = Vector3(tpos.x - cpos.x, 0, tpos.z - cpos.z).normalized()
+
+	# Handle camera behavior based on movement and catchup delay
+	if is_player_moving:
+
+		time_since_stopped = 0.0
+		if distance_to_player < leash_distance + target.RADIUS:
+			global_position.x += movement_direction.x * lead_speed * delta
+			global_position.z += movement_direction.z * lead_speed * delta
+		else:
+			global_position.x = tpos.x - direction_to_player.x * leash_distance
+			global_position.z = tpos.z - direction_to_player.z * leash_distance
+	else:
+		time_since_stopped += delta
+		if time_since_stopped >= catchup_delay_duration:
+			# Move the camera towards the player, scaling speed based on distance
+			global_position.x += direction_to_player.x * catchup_speed * delta * (max(distance_to_player / leash_distance, 0.05))
+			global_position.z += direction_to_player.z * catchup_speed * delta * (max(distance_to_player / leash_distance, 0.05))
+	
 	super(delta)
 
 func draw_logic() -> void:
