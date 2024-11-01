@@ -2,7 +2,11 @@ class_name LerpTargetFocusedSmoothing
 extends CameraControllerBase
 
 @export var lead_speed: float = 60.0
-@export var leash_distance: float = 4.0
+@export var leash_distance: float = 6.0
+@export var catchup_delay_duration: float = 0.2
+@export var catchup_speed: float = 25.0
+
+var time_since_stopped: float = 0.0
 
 func _process(delta: float) -> void:
 	if !current:
@@ -16,10 +20,13 @@ func _process(delta: float) -> void:
 	var cpos = global_position
 	var distance_to_player = Vector2(tpos.x, tpos.z).distance_to(Vector2(cpos.x, cpos.z))
 	
-	# Determine if the player is moving based on target's velocity
-	var is_player_moving = (abs(target.velocity.x) > 0|| abs(target.velocity.z) > 0)
+	# Determine if the vessel is moving
+	var is_player_moving = (abs(target.velocity.x) > 0 || abs(target.velocity.z) > 0)
 	
 	if is_player_moving:
+		# Reset the catch-up delay timer
+		time_since_stopped = 0.0
+		
 		# Calculate movement direction based on the vessel's velocity in the x-z plane
 		var movement_direction = Vector3(target.velocity.x, 0, target.velocity.z).normalized()
 		
@@ -34,13 +41,17 @@ func _process(delta: float) -> void:
 			var direction_to_vessel = Vector3(tpos.x - global_position.x, 0, tpos.z - global_position.z).normalized()
 			global_position.x = tpos.x - direction_to_vessel.x * leash_distance
 			global_position.z = tpos.z - direction_to_vessel.z * leash_distance
+	
 	else:
-		# Snap back to the vessel’s position if it stops moving
-		global_position.x = tpos.x
-		global_position.z = tpos.z
-		
+		time_since_stopped += delta
+		# If the timer exceeds the delay duration, start moving the camera back to the vessel
+		if time_since_stopped >= catchup_delay_duration:
+			# Calculate direction to the vessel and apply catchup speed
+			var direction_to_player = Vector3(tpos.x - global_position.x, 0, tpos.z - global_position.z).normalized()
+			global_position.x += direction_to_player.x * catchup_speed * delta
+			global_position.z += direction_to_player.z * catchup_speed * delta
+	
 	super(delta)
-
 
 
 func draw_logic() -> void:

@@ -136,7 +136,9 @@ script = ExtResource("3_4fllx")
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 30, 0)
 script = ExtResource("8_xq6pi")
 lead_speed = 60.0
-leash_distance = 4.0
+leash_distance = 6.0
+catchup_delay_duration = 0.2
+catchup_speed = 25.0
 target = NodePath("../Vessel")
 
 [node name="debug" type="Label" parent="LerpTargetFocused"]
