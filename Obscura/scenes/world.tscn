@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=4 uid="uid://88du8yjefx8j"]
+[gd_scene load_steps=15 format=4 uid="uid://88du8yjefx8j"]
 
 [ext_resource type="PackedScene" uid="uid://dtm13sp1jsrwi" path="res://scenes/vessel.tscn" id="1_oaql3"]
 [ext_resource type="Script" path="res://scripts/camera_selector.gd" id="2_qffo5"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://scripts/camera_controllers/auto_scroll.gd" id="6_jvh4f"]
 [ext_resource type="Script" path="res://scripts/camera_controllers/lerp.gd" id="7_giip7"]
 [ext_resource type="Script" path="res://scripts/camera_controllers/lerp_target_focused.gd" id="8_xq6pi"]
+[ext_resource type="Script" path="res://scripts/camera_controllers/push_zone.gd" id="9_fr5g8"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_k7gqa"]
 _surfaces = [{
@@ -45,7 +46,7 @@ terrain_manager = NodePath("../TerrainManager")
 
 [node name="CameraSelector" type="Node" parent="." node_paths=PackedStringArray("cameras")]
 script = ExtResource("2_qffo5")
-cameras = [NodePath("../PushBoxCamera"), NodePath("../LerpTargetFocused"), NodePath("../PushBoxCamera2"), NodePath("../PushBoxCamera3"), NodePath("../PositionLockCamera"), NodePath("../AutoScrollCamera"), NodePath("../AutoScrollCamera2"), NodePath("../LerpSmoothingCamera")]
+cameras = [NodePath("../PushBoxCamera"), NodePath("../PushBoxCamera2"), NodePath("../PushBoxCamera3"), NodePath("../PositionLockCamera"), NodePath("../AutoScrollCamera"), NodePath("../AutoScrollCamera2"), NodePath("../LerpSmoothingCamera"), NodePath("../LerpTargetFocusedCamera"), NodePath("../PushZoneCamera")]
 
 [node name="PushBoxCamera" parent="." node_paths=PackedStringArray("target") instance=ExtResource("3_ttnp6")]
 transform = Transform3D(1, 0, 0, 0, 1.19249e-08, 1, 0, -1, 1.19249e-08, 0, 30, 0)
@@ -132,7 +133,7 @@ offset_right = 40.0
 offset_bottom = 23.0
 script = ExtResource("3_4fllx")
 
-[node name="LerpTargetFocused" parent="." node_paths=PackedStringArray("target") instance=ExtResource("3_ttnp6")]
+[node name="LerpTargetFocusedCamera" parent="." node_paths=PackedStringArray("target") instance=ExtResource("3_ttnp6")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 30, 0)
 script = ExtResource("8_xq6pi")
 lead_speed = 60.0
@@ -141,7 +142,23 @@ catchup_delay_duration = 0.2
 catchup_speed = 25.0
 target = NodePath("../Vessel")
 
-[node name="debug" type="Label" parent="LerpTargetFocused"]
+[node name="debug" type="Label" parent="LerpTargetFocusedCamera"]
+visible = false
+offset_right = 40.0
+offset_bottom = 23.0
+script = ExtResource("3_4fllx")
+
+[node name="PushZoneCamera" parent="." node_paths=PackedStringArray("target") instance=ExtResource("3_ttnp6")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 30, 0)
+script = ExtResource("9_fr5g8")
+speedup_zone_top_left = Vector2(-5, -5)
+speedup_zone_bottom_right = Vector2(5, 5)
+pushbox_top_left = Vector2(-8, -8)
+pushbox_bottom_right = Vector2(8, 8)
+push_ratio = 0.5
+target = NodePath("../Vessel")
+
+[node name="debug" type="Label" parent="PushZoneCamera"]
 visible = false
 offset_right = 40.0
 offset_bottom = 23.0

@@ -8,6 +8,11 @@ extends CameraControllerBase
 
 var time_since_stopped: float = 0.0
 
+func _ready() -> void:
+	super()
+	position = target.position
+
+
 func _process(delta: float) -> void:
 	if !current:
 		position = target.position
