@@ -48,8 +48,8 @@ func _process(delta: float) -> void:
 		if time_since_stopped >= catchup_delay_duration:
 			# Calculate direction to the vessel and apply catchup speed
 			var direction_to_player = Vector3(tpos.x - global_position.x, 0, tpos.z - global_position.z).normalized()
-			global_position.x += direction_to_player.x * catchup_speed * delta
-			global_position.z += direction_to_player.z * catchup_speed * delta
+			global_position.x += direction_to_player.x * catchup_speed * delta * (max(distance_to_player/leash_distance, 0.05))
+			global_position.z += direction_to_player.z * catchup_speed * delta * (max(distance_to_player/leash_distance, 0.05))
 	
 	super(delta)
 
