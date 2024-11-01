@@ -24,7 +24,7 @@ func _process(delta: float) -> void:
 	var distance_to_player = Vector2(tpos.x, tpos.z).distance_to(Vector2(cpos.x, cpos.z))
 	
 	# Determine if the player is moving based on target's velocity
-	var is_player_moving = (target.velocity.x || target.velocity.z > 0)
+	var is_player_moving = (abs(target.velocity.x) > 0 || abs(target.velocity.z) > 0)
 	
 	# Use follow_speed if the player is moving, otherwise use catchup_speed
 	var speed = follow_speed if is_player_moving else catchup_speed
